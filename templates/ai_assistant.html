@@ -1,0 +1,226 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>AI Smart Assistant</title>
+
+    <style>
+
+        body {
+            margin: 0;
+            font-family: Arial, sans-serif;
+            background: linear-gradient(
+                135deg,
+                #0f172a,
+                #1e3a8a,
+                #2563eb
+            );
+            min-height: 100vh;
+        }
+
+        .header {
+            background: #111827;
+            color: white;
+            padding: 22px 35px;
+        }
+
+        .container {
+            max-width: 850px;
+            margin: 40px auto;
+            padding: 20px;
+        }
+
+        .card {
+            background: white;
+            padding: 30px;
+            border-radius: 16px;
+            box-shadow: 0 10px 30px rgba(0,0,0,.15);
+        }
+
+        .title {
+            text-align: center;
+            margin-bottom: 25px;
+        }
+
+        .title h1 {
+            color: #172554;
+        }
+
+        .title p {
+            color: #64748b;
+        }
+
+        input {
+            width: 100%;
+            box-sizing: border-box;
+            padding: 15px;
+            border: 1px solid #d1d5db;
+            border-radius: 8px;
+            font-size: 16px;
+            outline: none;
+        }
+
+        input:focus {
+            border-color: #2563eb;
+            box-shadow: 0 0 0 3px rgba(37,99,235,.1);
+        }
+
+        button {
+            margin-top: 15px;
+            width: 100%;
+            padding: 14px;
+            border: none;
+            border-radius: 8px;
+            background: #2563eb;
+            color: white;
+            font-size: 16px;
+            font-weight: bold;
+            cursor: pointer;
+        }
+
+        button:hover {
+            background: #1d4ed8;
+        }
+
+        .answer {
+            margin-top: 25px;
+            padding: 20px;
+            background: #eff6ff;
+            border-left: 5px solid #2563eb;
+            border-radius: 8px;
+            line-height: 1.6;
+        }
+
+        .examples {
+            margin-top: 25px;
+            color: #475569;
+        }
+
+        .examples p {
+            margin: 8px 0;
+        }
+
+        /* Back to Dashboard */
+
+        .back-section {
+            text-align: center;
+            margin-top: 25px;
+        }
+
+        .back-btn {
+            display: inline-block;
+            padding: 12px 22px;
+            background: #111827;
+            color: white;
+            text-decoration: none;
+            border-radius: 8px;
+            font-weight: 600;
+            transition: 0.2s;
+        }
+
+        .back-btn:hover {
+            background: #374151;
+        }
+
+    </style>
+
+</head>
+
+<body>
+
+<div class="header">
+
+    <h2>🤖 Smart Workspace AI Assistant</h2>
+
+</div>
+
+
+<div class="container">
+
+    <div class="card">
+
+        <div class="title">
+
+            <h1>AI Workspace Assistant</h1>
+
+            <p>
+                Ask questions about your workplace services.
+            </p>
+
+        </div>
+
+
+        <form method="POST">
+
+            <input
+                type="text"
+                name="question"
+                placeholder="Ask something like: How many parking slots are available?"
+                value="{{ question }}"
+                required
+            >
+
+            <button type="submit">
+                🤖 Ask Assistant
+            </button>
+
+        </form>
+
+
+        {% if answer %}
+
+        <div class="answer">
+
+            <strong>AI Assistant:</strong>
+
+            <p>{{ answer }}</p>
+
+        </div>
+
+        {% endif %}
+
+
+        <div class="examples">
+
+            <h3>Try asking:</h3>
+
+            <p>• How many parking slots are available?</p>
+
+            <p>• Show my latest visitor.</p>
+
+            <p>• What food is available?</p>
+
+            <p>• Are any tables available?</p>
+
+            <p>• How do I book laundry?</p>
+
+            <p>• How can I submit a facility request?</p>
+
+        </div>
+
+
+        <!-- BACK TO DASHBOARD -->
+
+        <div class="back-section">
+
+            <a
+                href="{{ url_for('dashboard') }}"
+                class="back-btn">
+
+                ← Back to Dashboard
+
+            </a>
+
+        </div>
+
+    </div>
+
+</div>
+
+</body>
+
+</html>

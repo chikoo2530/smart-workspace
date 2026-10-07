@@ -1,0 +1,593 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
+
+    <title>Add Visitor - Smart Workspace</title>
+
+
+    <style>
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: Arial, sans-serif;
+        }
+
+
+        body {
+
+            min-height: 100vh;
+
+            display: flex;
+
+            justify-content: center;
+
+            align-items: center;
+
+            background:
+                linear-gradient(
+                    135deg,
+                    #0f172a,
+                    #1e3a8a,
+                    #2563eb
+                );
+
+            padding: 25px;
+
+        }
+
+
+        /* Main Container */
+
+        .container {
+
+            width: 100%;
+
+            max-width: 550px;
+
+        }
+
+
+        /* Logo */
+
+        .logo {
+
+            text-align: center;
+
+            color: white;
+
+            font-size: 28px;
+
+            font-weight: bold;
+
+            margin-bottom: 22px;
+
+        }
+
+
+        .logo span {
+
+            color: #38bdf8;
+
+        }
+
+
+        /* Card */
+
+        .card {
+
+            background: white;
+
+            padding: 35px;
+
+            border-radius: 18px;
+
+            box-shadow:
+                0 15px 40px
+                rgba(0, 0, 0, 0.25);
+
+        }
+
+
+        /* Heading */
+
+        h1 {
+
+            text-align: center;
+
+            color: #172554;
+
+            font-size: 27px;
+
+            margin-bottom: 8px;
+
+        }
+
+
+        .subtitle {
+
+            text-align: center;
+
+            color: #64748b;
+
+            font-size: 14px;
+
+            margin-bottom: 28px;
+
+        }
+
+
+        /* Form */
+
+        .form-group {
+
+            margin-bottom: 20px;
+
+        }
+
+
+        .form-group label {
+
+            display: block;
+
+            color: #374151;
+
+            font-size: 14px;
+
+            font-weight: 600;
+
+            margin-bottom: 7px;
+
+        }
+
+
+        .form-group input[type="text"],
+        .form-group input[type="tel"],
+        .form-group input[type="date"] {
+
+            width: 100%;
+
+            padding: 13px 14px;
+
+            border: 1px solid #d1d5db;
+
+            border-radius: 9px;
+
+            font-size: 15px;
+
+            outline: none;
+
+            transition: 0.2s;
+
+        }
+
+
+        .form-group input:focus {
+
+            border-color: #2563eb;
+
+            box-shadow:
+                0 0 0 3px
+                rgba(37, 99, 235, 0.12);
+
+        }
+
+
+        /* Parking Box */
+
+        .parking-box {
+
+            background: #f8fafc;
+
+            border: 1px solid #e5e7eb;
+
+            border-radius: 10px;
+
+            padding: 18px;
+
+            margin-bottom: 22px;
+
+        }
+
+
+        .parking-title {
+
+            color: #374151;
+
+            font-weight: 600;
+
+            font-size: 14px;
+
+            margin-bottom: 14px;
+
+        }
+
+
+        .radio-option {
+
+            display: flex;
+
+            align-items: center;
+
+            gap: 9px;
+
+            margin-bottom: 10px;
+
+            color: #475569;
+
+            font-size: 14px;
+
+            cursor: pointer;
+
+        }
+
+
+        .radio-option:last-child {
+
+            margin-bottom: 0;
+
+        }
+
+
+        .radio-option input {
+
+            width: 17px;
+
+            height: 17px;
+
+            accent-color: #2563eb;
+
+            cursor: pointer;
+
+        }
+
+
+        /* Submit Button */
+
+        .submit-btn {
+
+            width: 100%;
+
+            padding: 14px;
+
+            border: none;
+
+            border-radius: 9px;
+
+            background: #2563eb;
+
+            color: white;
+
+            font-size: 16px;
+
+            font-weight: bold;
+
+            cursor: pointer;
+
+            transition: 0.2s;
+
+        }
+
+
+        .submit-btn:hover {
+
+            background: #1d4ed8;
+
+        }
+
+
+        /* Back Button */
+
+        .back-section {
+
+            text-align: center;
+
+            margin-top: 20px;
+
+        }
+
+
+        .back-btn {
+
+            display: inline-block;
+
+            padding: 11px 18px;
+
+            background: #111827;
+
+            color: white;
+
+            text-decoration: none;
+
+            border-radius: 8px;
+
+            font-size: 14px;
+
+            font-weight: 600;
+
+            transition: 0.2s;
+
+        }
+
+
+        .back-btn:hover {
+
+            background: #374151;
+
+        }
+
+
+        /* QR Info */
+
+        .info {
+
+            margin-top: 20px;
+
+            padding: 14px;
+
+            background: #eff6ff;
+
+            border-left: 4px solid #2563eb;
+
+            border-radius: 8px;
+
+            color: #1e3a8a;
+
+            font-size: 13px;
+
+            line-height: 1.5;
+
+        }
+
+
+        /* Mobile */
+
+        @media (max-width: 600px) {
+
+            body {
+
+                padding: 15px;
+
+            }
+
+
+            .card {
+
+                padding: 25px 20px;
+
+            }
+
+
+            h1 {
+
+                font-size: 24px;
+
+            }
+
+
+            .submit-btn {
+
+                font-size: 15px;
+
+            }
+
+        }
+
+    </style>
+
+</head>
+
+
+<body>
+
+
+<div class="container">
+
+
+    <!-- LOGO -->
+
+    <div class="logo">
+
+        Smart<span>Workspace</span>
+
+    </div>
+
+
+    <!-- CARD -->
+
+    <div class="card">
+
+
+        <h1>
+            👥 Add Visitor
+        </h1>
+
+
+        <p class="subtitle">
+
+            Create a visitor pass and generate a secure QR code.
+
+        </p>
+
+
+        <!-- FORM -->
+
+        <form method="POST">
+
+
+            <!-- VISITOR NAME -->
+
+            <div class="form-group">
+
+                <label for="visitor_name">
+                    Visitor Name
+                </label>
+
+                <input
+                    type="text"
+                    id="visitor_name"
+                    name="visitor_name"
+                    placeholder="Enter visitor name"
+                    required
+                >
+
+            </div>
+
+
+            <!-- PHONE -->
+
+            <div class="form-group">
+
+                <label for="visitor_phone">
+                    Visitor Phone
+                </label>
+
+                <input
+                    type="tel"
+                    id="visitor_phone"
+                    name="visitor_phone"
+                    placeholder="Enter phone number"
+                    required
+                >
+
+            </div>
+
+
+            <!-- DATE -->
+
+            <div class="form-group">
+
+                <label for="visit_date">
+                    Visit Date
+                </label>
+
+                <input
+                    type="date"
+                    id="visit_date"
+                    name="visit_date"
+                    required
+                >
+
+            </div>
+
+
+            <!-- VEHICLE -->
+
+            <div class="form-group">
+
+                <label for="vehicle_number">
+                    Vehicle Number
+                </label>
+
+                <input
+                    type="text"
+                    id="vehicle_number"
+                    name="vehicle_number"
+                    placeholder="Example: TS09AB1234"
+                >
+
+            </div>
+
+
+            <!-- PARKING -->
+
+            <div class="parking-box">
+
+                <div class="parking-title">
+
+                    🚗 Do you need parking?
+
+                </div>
+
+
+                <label class="radio-option">
+
+                    <input
+                        type="radio"
+                        name="parking_required"
+                        value="yes"
+                    >
+
+                    <span>
+                        Yes, I need parking
+                    </span>
+
+                </label>
+
+
+                <label class="radio-option">
+
+                    <input
+                        type="radio"
+                        name="parking_required"
+                        value="no"
+                        checked
+                    >
+
+                    <span>
+                        No, I don't need parking
+                    </span>
+
+                </label>
+
+            </div>
+
+
+            <!-- SUBMIT -->
+
+            <button
+                type="submit"
+                class="submit-btn">
+
+                🎫 Add Visitor & Generate QR
+
+            </button>
+
+
+        </form>
+
+
+        <!-- INFO -->
+
+        <div class="info">
+
+            🔐 <strong>Secure Visitor Pass:</strong>
+
+            After adding the visitor, a unique QR code
+            will be generated. Share the QR with your
+            visitor for security verification.
+
+        </div>
+
+
+        <!-- BACK -->
+
+        <div class="back-section">
+
+            <a
+                href="{{ url_for('visitor.list_visitors') }}"
+                class="back-btn">
+
+                ← Back to Visitors
+
+            </a>
+
+        </div>
+
+
+    </div>
+
+
+</div>
+
+
+</body>
+
+</html>

@@ -1,0 +1,204 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>My Food Orders - Smart Workspace</title>
+
+    <style>
+        * {
+            box-sizing: border-box;
+            font-family: Arial, sans-serif;
+        }
+
+        body {
+            margin: 0;
+            padding: 30px;
+            background: #f4f7fb;
+            color: #1f2937;
+        }
+
+        .container {
+            max-width: 900px;
+            margin: auto;
+        }
+
+        .header {
+            background: #2563eb;
+            color: white;
+            padding: 25px;
+            border-radius: 15px;
+            margin-bottom: 25px;
+        }
+
+        .order {
+            background: white;
+            padding: 25px;
+            margin-bottom: 20px;
+            border-radius: 12px;
+            box-shadow: 0 3px 10px rgba(0,0,0,0.08);
+        }
+
+        .order h3 {
+            color: #172554;
+            margin-bottom: 10px;
+        }
+
+        .status {
+            display: inline-block;
+            padding: 6px 12px;
+            border-radius: 20px;
+            background: #fef3c7;
+            color: #92400e;
+            font-size: 13px;
+        }
+
+        .item {
+            padding: 10px 0;
+            border-bottom: 1px solid #e5e7eb;
+        }
+
+        .total {
+            font-size: 20px;
+            font-weight: bold;
+            margin-top: 15px;
+            color: #2563eb;
+        }
+
+        .btn {
+            display: inline-block;
+            padding: 12px 18px;
+            margin-top: 15px;
+            border-radius: 8px;
+            text-decoration: none;
+            color: white;
+            background: #2563eb;
+        }
+
+        .btn:hover {
+            background: #1d4ed8;
+        }
+
+        .empty {
+            background: white;
+            padding: 40px;
+            text-align: center;
+            border-radius: 12px;
+        }
+    </style>
+</head>
+
+
+<body>
+
+<div class="container">
+
+    <div class="header">
+
+        <h1>🍽️ My Food Orders</h1>
+
+        <p>
+            View your Smart Workspace food orders.
+        </p>
+
+    </div>
+
+
+    {% if orders %}
+
+        {% for order in orders %}
+
+        <div class="order">
+
+            <h3>
+                Order #{{ order.id }}
+            </h3>
+
+            <p>
+                <strong>Date:</strong>
+                {{ order.created_at.strftime("%d-%m-%Y %H:%M") }}
+            </p>
+
+            <p>
+                <strong>Status:</strong>
+
+                <span class="status">
+                    {{ order.status }}
+                </span>
+
+            </p>
+
+
+            <h4>Order Items</h4>
+
+
+            {% for item in order.items %}
+
+            <div class="item">
+
+                <strong>
+                    {{ item.menu_item.name }}
+                </strong>
+
+                × {{ item.quantity }}
+
+                <br>
+
+                ₹{{ "%.2f"|format(item.price * item.quantity) }}
+
+            </div>
+
+            {% endfor %}
+
+
+            <div class="total">
+
+                Total:
+                ₹{{ "%.2f"|format(order.total_amount) }}
+
+            </div>
+
+        </div>
+
+        {% endfor %}
+
+
+    {% else %}
+
+        <div class="empty">
+
+            <h2>No Orders Yet 🍽️</h2>
+
+            <p>
+                You haven't placed any food orders yet.
+            </p>
+
+        </div>
+
+    {% endif %}
+
+
+    <a
+        href="{{ url_for('food.food_menu') }}"
+        class="btn">
+
+        ← Back to Food Menu
+
+    </a>
+
+
+    <a
+        href="{{ url_for('dashboard') }}"
+        class="btn">
+
+        🏠 Dashboard
+
+    </a>
+
+</div>
+
+</body>
+
+</html>

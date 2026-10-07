@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>My Reservations - Smart Workspace</title>
+</head>
+
+<body>
+
+    <h1>My Table Reservations</h1>
+
+    {% if reservations %}
+
+        {% for reservation in reservations %}
+
+            <div>
+
+                <h3>
+                    Table {{ reservation.table.table_number }}
+                </h3>
+
+                <p>
+                    Capacity:
+                    {{ reservation.table.capacity }} people
+                </p>
+
+                <p>
+                    Date:
+                    {{ reservation.reservation_date }}
+                </p>
+
+                <p>
+                    Time:
+                    {{ reservation.reservation_time }}
+                </p>
+
+                <p>
+                    Guests:
+                    {{ reservation.guests }}
+                </p>
+
+                <p>
+                    Status:
+                    {{ reservation.status }}
+                </p>
+
+                <p>
+                    Booked On:
+                 {{ reservation.ist_created_at.strftime("%d-%m-%Y %H:%M") }}
+                </p>
+
+            </div>
+
+            <hr>
+
+        {% endfor %}
+
+    {% else %}
+
+        <p>
+            You have no table reservations yet.
+        </p>
+
+    {% endif %}
+
+    <a href="{{ url_for('table.tables') }}">
+        ← Back to Tables
+    </a>
+
+    <br><br>
+
+    <a href="{{ url_for('dashboard') }}">
+        ← Back to Dashboard
+    </a>
+
+</body>
+</html>

@@ -1,0 +1,765 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
+
+    <title>Parking - Smart Workspace</title>
+
+
+    <style>
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: Arial, sans-serif;
+        }
+
+
+        body {
+
+            min-height: 100vh;
+
+            background:
+                linear-gradient(
+                    135deg,
+                    #0f172a,
+                    #1e3a8a,
+                    #2563eb
+                );
+
+            padding: 30px 20px;
+
+            color: #1f2937;
+
+        }
+
+
+        .container {
+
+            max-width: 1100px;
+
+            margin: auto;
+
+        }
+
+
+        /* Header */
+
+        .header {
+
+            display: flex;
+
+            justify-content: space-between;
+
+            align-items: center;
+
+            margin-bottom: 25px;
+
+            color: white;
+
+        }
+
+
+        .header h1 {
+
+            font-size: 30px;
+
+        }
+
+
+        .subtitle {
+
+            margin-top: 6px;
+
+            color: #dbeafe;
+
+            font-size: 14px;
+
+        }
+
+
+        /* Statistics */
+
+        .stats {
+
+            display: grid;
+
+            grid-template-columns:
+                repeat(2, 1fr);
+
+            gap: 18px;
+
+            margin-bottom: 25px;
+
+        }
+
+
+        .stat-card {
+
+            background: white;
+
+            border-radius: 15px;
+
+            padding: 22px;
+
+            box-shadow:
+                0 10px 25px
+                rgba(0, 0, 0, 0.12);
+
+        }
+
+
+        .stat-title {
+
+            color: #64748b;
+
+            font-size: 14px;
+
+            font-weight: 600;
+
+            margin-bottom: 8px;
+
+        }
+
+
+        .stat-number {
+
+            font-size: 30px;
+
+            font-weight: bold;
+
+        }
+
+
+        .available-number {
+
+            color: #16a34a;
+
+        }
+
+
+        .occupied-number {
+
+            color: #dc2626;
+
+        }
+
+
+        /* Flash Messages */
+
+        .flash {
+
+            background: white;
+
+            padding: 13px 16px;
+
+            border-radius: 9px;
+
+            margin-bottom: 18px;
+
+            font-weight: 500;
+
+        }
+
+
+        .flash.success {
+
+            color: #166534;
+
+            border-left: 5px solid #22c55e;
+
+        }
+
+
+        .flash.danger {
+
+            color: #991b1b;
+
+            border-left: 5px solid #ef4444;
+
+        }
+
+
+        .flash.warning {
+
+            color: #92400e;
+
+            border-left: 5px solid #f59e0b;
+
+        }
+
+
+        .flash.info {
+
+            color: #1e40af;
+
+            border-left: 5px solid #3b82f6;
+
+        }
+
+
+        /* Parking Grid */
+
+        .parking-grid {
+
+            display: grid;
+
+            grid-template-columns:
+                repeat(3, 1fr);
+
+            gap: 18px;
+
+        }
+
+
+        .slot-card {
+
+            background: white;
+
+            border-radius: 15px;
+
+            padding: 22px;
+
+            box-shadow:
+                0 10px 25px
+                rgba(0, 0, 0, 0.12);
+
+            border-top: 5px solid #16a34a;
+
+        }
+
+
+        .slot-card.occupied {
+
+            border-top-color: #dc2626;
+
+        }
+
+
+        .slot-header {
+
+            display: flex;
+
+            justify-content: space-between;
+
+            align-items: center;
+
+            margin-bottom: 18px;
+
+        }
+
+
+        .slot-header h3 {
+
+            color: #172554;
+
+            font-size: 21px;
+
+        }
+
+
+        /* Status */
+
+        .status {
+
+            padding: 5px 10px;
+
+            border-radius: 20px;
+
+            font-size: 11px;
+
+            font-weight: bold;
+
+        }
+
+
+        .status.available {
+
+            background: #dcfce7;
+
+            color: #166534;
+
+        }
+
+
+        .status.occupied {
+
+            background: #fee2e2;
+
+            color: #991b1b;
+
+        }
+
+
+        /* Details */
+
+        .details {
+
+            background: #f8fafc;
+
+            border-radius: 9px;
+
+            padding: 12px;
+
+            margin-bottom: 15px;
+
+        }
+
+
+        .detail-row {
+
+            display: flex;
+
+            justify-content: space-between;
+
+            padding: 8px 0;
+
+            border-bottom:
+                1px solid #e5e7eb;
+
+            font-size: 14px;
+
+        }
+
+
+        .detail-row:last-child {
+
+            border-bottom: none;
+
+        }
+
+
+        .label {
+
+            color: #64748b;
+
+            font-weight: 600;
+
+        }
+
+
+        .value {
+
+            color: #111827;
+
+            font-weight: 500;
+
+        }
+
+
+        /* Release Button */
+
+        .release-btn {
+
+            width: 100%;
+
+            padding: 11px;
+
+            border: none;
+
+            border-radius: 8px;
+
+            background: #dc2626;
+
+            color: white;
+
+            font-weight: bold;
+
+            cursor: pointer;
+
+            transition: 0.2s;
+
+        }
+
+
+        .release-btn:hover {
+
+            background: #b91c1c;
+
+        }
+
+
+        /* Empty */
+
+        .empty {
+
+            background: white;
+
+            border-radius: 15px;
+
+            padding: 45px 20px;
+
+            text-align: center;
+
+            box-shadow:
+                0 10px 25px
+                rgba(0, 0, 0, 0.12);
+
+        }
+
+
+        .empty-icon {
+
+            font-size: 50px;
+
+            margin-bottom: 12px;
+
+        }
+
+
+        .empty h2 {
+
+            color: #172554;
+
+            margin-bottom: 8px;
+
+        }
+
+
+        .empty p {
+
+            color: #64748b;
+
+        }
+
+
+        /* Back */
+
+        .back-section {
+
+            text-align: center;
+
+            margin-top: 28px;
+
+        }
+
+
+        .back-btn {
+
+            display: inline-block;
+
+            padding: 12px 20px;
+
+            background: #111827;
+
+            color: white;
+
+            text-decoration: none;
+
+            border-radius: 9px;
+
+            font-weight: 600;
+
+        }
+
+
+        .back-btn:hover {
+
+            background: #374151;
+
+        }
+
+
+        /* Responsive */
+
+        @media (max-width: 900px) {
+
+            .parking-grid {
+
+                grid-template-columns:
+                    repeat(2, 1fr);
+
+            }
+
+        }
+
+
+        @media (max-width: 650px) {
+
+            body {
+
+                padding: 20px 12px;
+
+            }
+
+
+            .header {
+
+                align-items: flex-start;
+
+            }
+
+
+            .header h1 {
+
+                font-size: 25px;
+
+            }
+
+
+            .stats {
+
+                grid-template-columns: 1fr;
+
+            }
+
+
+            .parking-grid {
+
+                grid-template-columns: 1fr;
+
+            }
+
+        }
+
+    </style>
+
+</head>
+
+
+<body>
+
+
+<div class="container">
+
+
+    <!-- HEADER -->
+
+    <div class="header">
+
+        <div>
+
+            <h1>🚗 Smart Parking</h1>
+
+            <p class="subtitle">
+                Real-time parking slot management
+            </p>
+
+        </div>
+
+    </div>
+
+
+    <!-- STATISTICS -->
+
+    <div class="stats">
+
+
+        <div class="stat-card">
+
+            <div class="stat-title">
+                AVAILABLE SLOTS
+            </div>
+
+            <div class="stat-number available-number">
+                {{ available_count }}
+            </div>
+
+        </div>
+
+
+        <div class="stat-card">
+
+            <div class="stat-title">
+                OCCUPIED SLOTS
+            </div>
+
+            <div class="stat-number occupied-number">
+                {{ occupied_count }}
+            </div>
+
+        </div>
+
+
+    </div>
+
+
+    <!-- FLASH MESSAGES -->
+
+    {% with messages = get_flashed_messages(with_categories=true) %}
+
+        {% for category, message in messages %}
+
+            <div class="flash {{ category }}">
+                {{ message }}
+            </div>
+
+        {% endfor %}
+
+    {% endwith %}
+
+
+    <!-- PARKING SLOTS -->
+
+    {% if slots %}
+
+        <div class="parking-grid">
+
+
+            {% for slot in slots %}
+
+                <div class="slot-card
+                    {% if slot.status == 'Occupied' %}
+                        occupied
+                    {% endif %}">
+
+
+                    <div class="slot-header">
+
+                        <h3>
+                            🅿️ Slot {{ slot.slot_number }}
+                        </h3>
+
+
+                        {% if slot.status == "Occupied" %}
+
+                            <span class="status occupied">
+                                OCCUPIED
+                            </span>
+
+                        {% else %}
+
+                            <span class="status available">
+                                AVAILABLE
+                            </span>
+
+                        {% endif %}
+
+                    </div>
+
+
+                    <!-- DETAILS -->
+
+                    <div class="details">
+
+
+                        <div class="detail-row">
+
+                            <span class="label">
+                                Floor
+                            </span>
+
+                            <span class="value">
+                                {{ slot.floor }}
+                            </span>
+
+                        </div>
+
+
+                        <div class="detail-row">
+
+                            <span class="label">
+                                Status
+                            </span>
+
+                            <span class="value">
+                                {{ slot.status }}
+                            </span>
+
+                        </div>
+
+
+                        {% if slot.vehicle_number %}
+
+                            <div class="detail-row">
+
+                                <span class="label">
+                                    Vehicle
+                                </span>
+
+                                <span class="value">
+                                    {{ slot.vehicle_number }}
+                                </span>
+
+                            </div>
+
+                        {% endif %}
+
+
+                    </div>
+
+
+                    <!-- RELEASE -->
+
+                    {% if slot.status == "Occupied" %}
+
+                        <form
+                            method="POST"
+                            action="{{ url_for(
+                                'parking.release_parking',
+                                slot_id=slot.id
+                            ) }}">
+
+                            <button
+                                type="submit"
+                                class="release-btn">
+
+                                Release Slot
+
+                            </button>
+
+                        </form>
+
+                    {% endif %}
+
+
+                </div>
+
+            {% endfor %}
+
+
+        </div>
+
+
+    {% else %}
+
+
+        <!-- EMPTY -->
+
+        <div class="empty">
+
+            <div class="empty-icon">
+                🅿️
+            </div>
+
+            <h2>
+                No Parking Slots
+            </h2>
+
+            <p>
+                No parking slots have been added yet.
+            </p>
+
+        </div>
+
+
+    {% endif %}
+
+
+    <!-- BACK -->
+
+    <div class="back-section">
+
+        <a
+            href="{{ url_for('dashboard') }}"
+            class="back-btn">
+
+            ← Back to Dashboard
+
+        </a>
+
+    </div>
+
+
+</div>
+
+
+</body>
+
+</html>

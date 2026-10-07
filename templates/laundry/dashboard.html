@@ -1,0 +1,631 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
+
+    <title>Laundry - Smart Workspace</title>
+
+
+    <style>
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: Arial, sans-serif;
+        }
+
+        body {
+            min-height: 100vh;
+            background: linear-gradient(
+                135deg,
+                #0f172a,
+                #1e3a8a,
+                #2563eb
+            );
+            padding: 30px 20px;
+            color: #1f2937;
+        }
+
+        .container {
+            max-width: 1100px;
+            margin: auto;
+        }
+
+        /* Header */
+
+        .header {
+            color: white;
+            margin-bottom: 25px;
+        }
+
+        .header h1 {
+            font-size: 30px;
+        }
+
+        .subtitle {
+            margin-top: 7px;
+            color: #dbeafe;
+            font-size: 14px;
+        }
+
+        /* Flash Messages */
+
+        .flash {
+            background: white;
+            padding: 13px 16px;
+            border-radius: 9px;
+            margin-bottom: 18px;
+            font-weight: 500;
+        }
+
+        .flash.success {
+            color: #166534;
+            border-left: 5px solid #22c55e;
+        }
+
+        .flash.danger {
+            color: #991b1b;
+            border-left: 5px solid #ef4444;
+        }
+
+        .flash.warning {
+            color: #92400e;
+            border-left: 5px solid #f59e0b;
+        }
+
+        .flash.info {
+            color: #1e40af;
+            border-left: 5px solid #3b82f6;
+        }
+
+        /* Layout */
+
+        .content {
+            display: grid;
+            grid-template-columns: 1fr 1.2fr;
+            gap: 22px;
+            align-items: start;
+        }
+
+        /* Cards */
+
+        .card {
+            background: white;
+            border-radius: 16px;
+            padding: 25px;
+            box-shadow:
+                0 10px 25px
+                rgba(0, 0, 0, 0.12);
+        }
+
+        .card h2 {
+            color: #172554;
+            font-size: 21px;
+            margin-bottom: 6px;
+        }
+
+        .card-subtitle {
+            color: #64748b;
+            font-size: 13px;
+            margin-bottom: 22px;
+        }
+
+        /* Form */
+
+        .form-group {
+            margin-bottom: 18px;
+        }
+
+        .form-group label {
+            display: block;
+            color: #374151;
+            font-size: 14px;
+            font-weight: 600;
+            margin-bottom: 7px;
+        }
+
+        select,
+        input[type="number"],
+        input[type="date"],
+        textarea {
+            width: 100%;
+            padding: 12px 13px;
+            border: 1px solid #d1d5db;
+            border-radius: 9px;
+            font-size: 14px;
+            outline: none;
+            background: white;
+            transition: 0.2s;
+        }
+
+        select:focus,
+        input:focus,
+        textarea:focus {
+            border-color: #2563eb;
+            box-shadow:
+                0 0 0 3px
+                rgba(37, 99, 235, 0.12);
+        }
+
+        textarea {
+            resize: vertical;
+            min-height: 100px;
+        }
+
+        .book-btn {
+            width: 100%;
+            padding: 13px;
+            border: none;
+            border-radius: 9px;
+            background: #2563eb;
+            color: white;
+            font-size: 15px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: 0.2s;
+        }
+
+        .book-btn:hover {
+            background: #1d4ed8;
+        }
+
+        /* Laundry Requests */
+
+        .requests {
+            display: flex;
+            flex-direction: column;
+            gap: 14px;
+        }
+
+        .request-card {
+            border: 1px solid #e5e7eb;
+            border-radius: 11px;
+            padding: 17px;
+            background: #f8fafc;
+        }
+
+        .request-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 12px;
+        }
+
+        .request-header h3 {
+            color: #172554;
+            font-size: 17px;
+        }
+
+        .status {
+            padding: 5px 10px;
+            border-radius: 20px;
+            background: #dbeafe;
+            color: #1e40af;
+            font-size: 11px;
+            font-weight: bold;
+        }
+
+        .request-detail {
+            display: flex;
+            justify-content: space-between;
+            padding: 7px 0;
+            border-bottom: 1px solid #e5e7eb;
+            font-size: 13px;
+        }
+
+        .request-detail:last-child {
+            border-bottom: none;
+        }
+
+        .label {
+            color: #64748b;
+            font-weight: 600;
+        }
+
+        .value {
+            color: #111827;
+            text-align: right;
+        }
+
+        .notes {
+            margin-top: 10px;
+            padding: 10px;
+            background: white;
+            border-radius: 7px;
+            color: #475569;
+            font-size: 13px;
+        }
+
+        /* Empty State */
+
+        .empty {
+            text-align: center;
+            padding: 35px 15px;
+            background: #f8fafc;
+            border-radius: 10px;
+        }
+
+        .empty-icon {
+            font-size: 42px;
+            margin-bottom: 10px;
+        }
+
+        .empty h3 {
+            color: #172554;
+            margin-bottom: 6px;
+        }
+
+        .empty p {
+            color: #64748b;
+            font-size: 13px;
+        }
+
+        /* Back */
+
+        .back-section {
+            text-align: center;
+            margin-top: 25px;
+        }
+
+        .back-btn {
+            display: inline-block;
+            padding: 12px 20px;
+            background: #111827;
+            color: white;
+            text-decoration: none;
+            border-radius: 9px;
+            font-weight: 600;
+        }
+
+        .back-btn:hover {
+            background: #374151;
+        }
+
+        /* Responsive */
+
+        @media (max-width: 800px) {
+
+            .content {
+                grid-template-columns: 1fr;
+            }
+
+        }
+
+        @media (max-width: 500px) {
+
+            body {
+                padding: 20px 12px;
+            }
+
+            .header h1 {
+                font-size: 25px;
+            }
+
+            .card {
+                padding: 20px;
+            }
+
+            .request-header {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+
+            .request-detail {
+                flex-direction: column;
+                gap: 3px;
+            }
+
+            .value {
+                text-align: left;
+            }
+
+        }
+
+    </style>
+
+</head>
+
+
+<body>
+
+
+<div class="container">
+
+
+    <!-- HEADER -->
+
+    <div class="header">
+
+        <h1>🧺 Laundry Service</h1>
+
+        <p class="subtitle">
+            Book and manage your laundry services
+        </p>
+
+    </div>
+
+
+    <!-- FLASH MESSAGES -->
+
+    {% with messages = get_flashed_messages(with_categories=true) %}
+
+        {% for category, message in messages %}
+
+            <div class="flash {{ category }}">
+                {{ message }}
+            </div>
+
+        {% endfor %}
+
+    {% endwith %}
+
+
+    <!-- CONTENT -->
+
+    <div class="content">
+
+
+        <!-- BOOK LAUNDRY -->
+
+        <div class="card">
+
+            <h2>🧺 Book Laundry Service</h2>
+
+            <p class="card-subtitle">
+                Choose a service and schedule your pickup.
+            </p>
+
+
+            <form method="POST"
+                  action="{{ url_for('laundry.create_request') }}">
+
+
+                <!-- SERVICE -->
+
+                <div class="form-group">
+
+                    <label>
+                        Service Type
+                    </label>
+
+                    <select
+                        name="service_type"
+                        required>
+
+                        <option value="">
+                            Select Service
+                        </option>
+
+                        <option value="Washing">
+                            Washing
+                        </option>
+
+                        <option value="Ironing">
+                            Ironing
+                        </option>
+
+                        <option value="Folding">
+                            Folding
+                        </option>
+
+                        <option value="Dry Cleaning">
+                            Dry Cleaning
+                        </option>
+
+                        <option value="Washing + Ironing">
+                            Washing + Ironing
+                        </option>
+
+                    </select>
+
+                </div>
+
+
+                <!-- ITEMS -->
+
+                <div class="form-group">
+
+                    <label>
+                        Number of Items
+                    </label>
+
+                    <input
+                        type="number"
+                        name="items_count"
+                        min="1"
+                        value="1"
+                        required
+                    >
+
+                </div>
+
+
+                <!-- DATE -->
+
+                <div class="form-group">
+
+                    <label>
+                        Pickup Date
+                    </label>
+
+                    <input
+                        type="date"
+                        name="pickup_date"
+                        required
+                    >
+
+                </div>
+
+
+                <!-- NOTES -->
+
+                <div class="form-group">
+
+                    <label>
+                        Notes
+                    </label>
+
+                    <textarea
+                        name="notes"
+                        placeholder="Any special instructions?"
+                    ></textarea>
+
+                </div>
+
+
+                <!-- BUTTON -->
+
+                <button
+                    type="submit"
+                    class="book-btn">
+
+                    🧺 Book Laundry
+
+                </button>
+
+
+            </form>
+
+        </div>
+
+
+        <!-- MY REQUESTS -->
+
+        <div class="card">
+
+            <h2>📋 My Laundry Requests</h2>
+
+            <p class="card-subtitle">
+                Track your current laundry bookings.
+            </p>
+
+
+            {% if requests %}
+
+                <div class="requests">
+
+
+                    {% for item in requests %}
+
+                        <div class="request-card">
+
+
+                            <div class="request-header">
+
+                                <h3>
+                                    🧺 {{ item.service_type }}
+                                </h3>
+
+                                <span class="status">
+                                    {{ item.status }}
+                                </span>
+
+                            </div>
+
+
+                            <div class="request-detail">
+
+                                <span class="label">
+                                    Items
+                                </span>
+
+                                <span class="value">
+                                    {{ item.items_count }}
+                                </span>
+
+                            </div>
+
+
+                            <div class="request-detail">
+
+                                <span class="label">
+                                    Pickup Date
+                                </span>
+
+                                <span class="value">
+                                    {{ item.pickup_date }}
+                                </span>
+
+                            </div>
+
+
+                            {% if item.notes %}
+
+                                <div class="notes">
+
+                                    <strong>
+                                        Notes:
+                                    </strong>
+
+                                    {{ item.notes }}
+
+                                </div>
+
+                            {% endif %}
+
+
+                        </div>
+
+                    {% endfor %}
+
+
+                </div>
+
+
+            {% else %}
+
+
+                <div class="empty">
+
+                    <div class="empty-icon">
+                        🧺
+                    </div>
+
+                    <h3>
+                        No Laundry Requests
+                    </h3>
+
+                    <p>
+                        Your laundry bookings will appear here.
+                    </p>
+
+                </div>
+
+
+            {% endif %}
+
+
+        </div>
+
+
+    </div>
+
+
+    <!-- BACK -->
+
+    <div class="back-section">
+
+        <a
+            href="{{ url_for('dashboard') }}"
+            class="back-btn">
+
+            ← Back to Dashboard
+
+        </a>
+
+    </div>
+
+
+</div>
+
+
+</body>
+
+</html>

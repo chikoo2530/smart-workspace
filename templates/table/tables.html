@@ -1,0 +1,266 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Table Reservation - Smart Workspace</title>
+
+    <style>
+        * {
+            box-sizing: border-box;
+            font-family: Arial, sans-serif;
+        }
+
+        body {
+            margin: 0;
+            padding: 30px;
+            background: #f4f7fb;
+            color: #1f2937;
+        }
+
+        .container {
+            max-width: 1000px;
+            margin: auto;
+        }
+
+        .header {
+            background: #2563eb;
+            color: white;
+            padding: 25px;
+            border-radius: 15px;
+            margin-bottom: 25px;
+        }
+
+        .tables {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 20px;
+        }
+
+        .table-card {
+            background: white;
+            padding: 22px;
+            border-radius: 12px;
+            box-shadow: 0 3px 10px rgba(0,0,0,0.08);
+        }
+
+        .table-card h2 {
+            color: #172554;
+        }
+
+        .available {
+            color: #16a34a;
+            font-weight: bold;
+        }
+
+        .unavailable {
+            color: #dc2626;
+            font-weight: bold;
+        }
+
+        input {
+            width: 100%;
+            padding: 10px;
+            margin: 7px 0 12px;
+            border: 1px solid #d1d5db;
+            border-radius: 6px;
+        }
+
+        button,
+        .btn {
+            display: inline-block;
+            padding: 11px 16px;
+            border: none;
+            border-radius: 7px;
+            background: #2563eb;
+            color: white;
+            text-decoration: none;
+            cursor: pointer;
+        }
+
+        button:hover,
+        .btn:hover {
+            background: #1d4ed8;
+        }
+
+        .back {
+            margin-top: 25px;
+        }
+
+        .message {
+            background: #dcfce7;
+            color: #166534;
+            padding: 12px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+        }
+
+        @media (max-width: 800px) {
+            .tables {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+
+
+<body>
+
+<div class="container">
+
+    <div class="header">
+
+        <h1>🪑 Table Reservation</h1>
+
+        <p>
+            Reserve a dining table at Smart Workspace.
+        </p>
+
+    </div>
+
+
+    <!-- FLASH MESSAGES -->
+
+    {% with messages = get_flashed_messages(with_categories=true) %}
+
+        {% for category, message in messages %}
+
+            <div class="message">
+                {{ message }}
+            </div>
+
+        {% endfor %}
+
+    {% endwith %}
+
+
+    <!-- TABLES -->
+
+    {% if tables %}
+
+    <div class="tables">
+
+        {% for table in tables %}
+
+        <div class="table-card">
+
+            <h2>
+                Table {{ table.table_number }}
+            </h2>
+
+            <p>
+                Capacity:
+                <strong>{{ table.capacity }}</strong>
+                people
+            </p>
+
+
+            {% if table.status == "Available" %}
+
+                <p class="available">
+                    ● Available
+                </p>
+
+
+                <form
+                    method="POST"
+                    action="{{ url_for('table.reserve_table', table_id=table.id) }}"
+                >
+
+                    <label>
+                        Reservation Date
+                    </label>
+
+                    <input
+                        type="date"
+                        name="reservation_date"
+                        required
+                    >
+
+
+                    <label>
+                        Reservation Time
+                    </label>
+
+                    <input
+                        type="time"
+                        name="reservation_time"
+                        required
+                    >
+
+
+                    <label>
+                        Number of Guests
+                    </label>
+
+                    <input
+                        type="number"
+                        name="guests"
+                        min="1"
+                        max="{{ table.capacity }}"
+                        value="1"
+                        required
+                    >
+
+
+                    <button type="submit">
+                        Reserve Table
+                    </button>
+
+                </form>
+
+
+            {% else %}
+
+                <p class="unavailable">
+                    ● {{ table.status }}
+                </p>
+
+            {% endif %}
+
+        </div>
+
+        {% endfor %}
+
+    </div>
+
+
+    {% else %}
+
+        <div class="table-card">
+
+            <h2>No Tables Available</h2>
+
+            <p>
+                No dining tables have been added yet.
+            </p>
+
+        </div>
+
+    {% endif %}
+
+
+    <br>
+
+
+    <a
+        href="{{ url_for('table.my_reservations') }}"
+        class="btn"
+    >
+        📋 My Reservations
+    </a>
+
+
+    <a
+        href="{{ url_for('dashboard') }}"
+        class="btn back"
+    >
+        🏠 Dashboard
+    </a>
+
+</div>
+
+</body>
+</html>

@@ -1,0 +1,446 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Smart Workspace Dashboard</title>
+
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: Arial, sans-serif;
+        }
+
+        body {
+            background: #f4f7fb;
+            display: flex;
+            min-height: 100vh;
+        }
+
+        /* SIDEBAR */
+        .sidebar {
+            width: 250px;
+            background: #172554;
+            color: white;
+            min-height: 100vh;
+            padding: 25px 15px;
+            position: fixed;
+            left: 0;
+            top: 0;
+            bottom: 0;
+        }
+
+        .logo {
+            text-align: center;
+            font-size: 22px;
+            font-weight: bold;
+            margin-bottom: 35px;
+        }
+
+        .menu a {
+            display: block;
+            color: white;
+            text-decoration: none;
+            padding: 14px 18px;
+            margin-bottom: 8px;
+            border-radius: 8px;
+            transition: 0.2s;
+        }
+
+        .menu a:hover {
+            background: #2563eb;
+        }
+
+        .menu a.active {
+            background: #2563eb;
+        }
+
+        .logout {
+            margin-top: 30px;
+            background: #dc2626 !important;
+        }
+
+        .logout:hover {
+            background: #b91c1c !important;
+        }
+
+        /* MAIN */
+        .main {
+            margin-left: 250px;
+            width: calc(100% - 250px);
+            padding: 30px;
+        }
+
+        .topbar {
+            background: white;
+            padding: 20px 25px;
+            border-radius: 12px;
+            margin-bottom: 25px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+        }
+
+        .topbar h1 {
+            color: #172554;
+            margin-bottom: 5px;
+        }
+
+        .topbar p {
+            color: #64748b;
+        }
+
+        /* CARDS */
+        .cards {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 20px;
+        }
+
+        .card {
+            background: white;
+            padding: 25px;
+            border-radius: 14px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+            transition: 0.2s;
+        }
+
+        .card:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.12);
+        }
+
+        .card h3 {
+            color: #172554;
+            margin-bottom: 10px;
+        }
+
+        .card p {
+            color: #64748b;
+            margin-bottom: 18px;
+            min-height: 40px;
+        }
+
+        .btn {
+            display: inline-block;
+            text-decoration: none;
+            color: white;
+            background: #2563eb;
+            padding: 10px 18px;
+            border-radius: 7px;
+        }
+
+        .btn:hover {
+            background: #1d4ed8;
+        }
+
+        /* PROFILE */
+        .profile {
+            background: white;
+            margin-top: 25px;
+            padding: 20px;
+            border-radius: 12px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+        }
+
+        .profile h3 {
+            color: #172554;
+            margin-bottom: 8px;
+        }
+
+        /* MOBILE */
+        @media (max-width: 900px) {
+            .cards {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+
+        @media (max-width: 650px) {
+            .sidebar {
+                width: 200px;
+            }
+
+            .main {
+                margin-left: 200px;
+                width: calc(100% - 200px);
+            }
+
+            .cards {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <!-- SIDEBAR -->
+    <aside class="sidebar">
+
+        <div class="logo">
+            🏢 Smart Workspace
+        </div>
+
+        <div class="menu">
+
+            <a href="{{ url_for('dashboard') }}" class="active">
+                🏠 Dashboard
+            </a>
+
+            <a href="{{ url_for('visitor.list_visitors') }}">
+                👥 Visitors
+            </a>
+
+            <a href="{{ url_for('parking.parking_dashboard') }}">
+                🚗 Smart Parking
+            </a>
+
+            <a href="{{ url_for('food.food_menu') }}">
+                🍽️ Food & Dining
+            </a>
+
+            <a href="{{ url_for('table.tables') }}">
+                🪑 Table Reservation
+            </a>
+
+            <a href="{{ url_for('laundry.laundry_dashboard') }}">
+                👕 Laundry
+            </a>
+
+            <a href="{{ url_for('facility.facility_dashboard') }}">
+                🛠️ Facility Requests
+            </a>
+
+            <a href="/security/dashboard">
+                🛡️ Security
+            </a>
+
+            <a href="/admin/dashboard">
+                ⚙️ Admin
+            </a>
+
+            <a href="#" onclick="alert('AI Assistant will be added next.'); return false;">
+                🤖 AI Assistant
+            </a>
+
+            <a href="{{ url_for('auth.logout') }}" class="logout">
+                🚪 Logout
+            </a>
+
+        </div>
+
+    </aside>
+
+
+    <!-- MAIN CONTENT -->
+    <main class="main">
+
+        <div class="topbar">
+
+            <h1>
+                Welcome, {{ current_user.name }} 👋
+            </h1>
+
+            <p>
+                Smart Workspace Management System
+            </p>
+
+        </div>
+
+
+        <!-- FEATURE CARDS -->
+        <div class="cards">
+
+
+            <!-- VISITORS -->
+            <div class="card">
+
+                <h3>👥 Visitor Management</h3>
+
+                <p>
+                    Add visitors, generate QR codes and manage visitor access.
+                </p>
+
+                <a
+                    href="{{ url_for('visitor.list_visitors') }}"
+                    class="btn">
+                    Open Visitors
+                </a>
+
+            </div>
+
+
+            <!-- PARKING -->
+            <div class="card">
+
+                <h3>🚗 Smart Parking</h3>
+
+                <p>
+                    Check parking availability and manage visitor parking slots.
+                </p>
+
+                <a
+                    href="{{ url_for('parking.parking_dashboard') }}"
+                    class="btn">
+                    Open Parking
+                </a>
+
+            </div>
+
+
+            <!-- FOOD -->
+            <div class="card">
+
+                <h3>🍽️ Food & Dining</h3>
+
+                <p>
+                    View menu items and place food orders.
+                </p>
+
+                <a
+                    href="{{ url_for('food.food_menu') }}"
+                    class="btn">
+                    View Menu
+                </a>
+
+            </div>
+
+
+            <!-- TABLE -->
+            <div class="card">
+
+                <h3>🪑 Table Reservation</h3>
+
+                <p>
+                    Check available tables and reserve your table.
+                </p>
+
+                <a
+                    href="{{ url_for('table.tables') }}"
+                    class="btn">
+                    Reserve Table
+                </a>
+
+            </div>
+
+
+            <!-- LAUNDRY -->
+            <div class="card">
+
+                <h3>👕 Laundry Service</h3>
+
+                <p>
+                    Book washing, ironing, folding and other laundry services.
+                </p>
+
+                <a
+                    href="{{ url_for('laundry.laundry_dashboard') }}"
+                    class="btn">
+                    Book Laundry
+                </a>
+
+            </div>
+
+
+            <!-- FACILITY -->
+            <div class="card">
+
+                <h3>🛠️ Facility Requests</h3>
+
+                <p>
+                    Submit maintenance, housekeeping and other facility requests.
+                </p>
+
+                <a
+                    href="{{ url_for('facility.facility_dashboard') }}"
+                    class="btn">
+                    Request Facility
+                </a>
+
+            </div>
+
+
+            <!-- SECURITY -->
+            <div class="card">
+
+                <h3>🛡️ Security</h3>
+
+                <p>
+                    Security team can check pending visitors and verify access.
+                </p>
+
+                <a
+                    href="/security/dashboard"
+                    class="btn">
+                    Security Dashboard
+                </a>
+
+            </div>
+
+
+            <!-- ADMIN -->
+            <div class="card">
+
+                <h3>⚙️ Admin</h3>
+
+                <p>
+                    Manage users and monitor the Smart Workspace system.
+                </p>
+
+                <a
+                    href="/admin/dashboard"
+                    class="btn">
+                    Admin Dashboard
+                </a>
+
+            </div>
+
+
+            <!-- AI -->
+            <div class="card">
+
+                <h3>🤖 AI Assistant</h3>
+
+                <p>
+                    Smart AI assistant for workspace-related queries.
+                </p>
+
+                <a
+                    href="#"
+                    class="btn"
+                    onclick="alert('AI Assistant will be added next.'); return false;">
+                    Open AI
+                </a>
+
+            </div>
+
+        </div>
+
+
+        <!-- PROFILE -->
+        <div class="profile">
+
+            <h3>👤 My Profile</h3>
+
+            <p>
+                <strong>Name:</strong>
+                {{ current_user.name }}
+            </p>
+
+            <p>
+                <strong>Email:</strong>
+                {{ current_user.email }}
+            </p>
+
+            <p>
+                <strong>Role:</strong>
+                {{ current_user.role }}
+            </p>
+
+        </div>
+
+    </main>
+
+</body>
+</html>

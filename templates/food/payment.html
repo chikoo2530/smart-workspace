@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Food Payment - Smart Workspace</title>
+
+    <style>
+        * {
+            box-sizing: border-box;
+            font-family: Arial, sans-serif;
+        }
+
+        body {
+            margin: 0;
+            padding: 30px;
+            background: #f4f7fb;
+        }
+
+        .container {
+            max-width: 600px;
+            margin: 30px auto;
+            background: white;
+            padding: 30px;
+            border-radius: 15px;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.08);
+        }
+
+        h1 {
+            color: #172554;
+        }
+
+        .amount {
+            background: #2563eb;
+            color: white;
+            padding: 20px;
+            border-radius: 12px;
+            text-align: center;
+            margin: 20px 0;
+        }
+
+        .amount h2 {
+            font-size: 30px;
+            margin: 5px;
+        }
+
+        .method {
+            border: 2px solid #e5e7eb;
+            padding: 15px;
+            margin: 10px 0;
+            border-radius: 10px;
+            cursor: pointer;
+        }
+
+        .method:hover {
+            border-color: #2563eb;
+        }
+
+        .method input {
+            margin-right: 10px;
+        }
+
+        .pay-btn {
+            width: 100%;
+            padding: 14px;
+            margin-top: 20px;
+            border: none;
+            border-radius: 8px;
+            background: #16a34a;
+            color: white;
+            font-size: 17px;
+            cursor: pointer;
+        }
+
+        .pay-btn:hover {
+            background: #15803d;
+        }
+
+        .back {
+            display: inline-block;
+            margin-top: 15px;
+            text-decoration: none;
+            color: #2563eb;
+        }
+    </style>
+</head>
+
+<body>
+
+<div class="container">
+
+    <h1>💳 Food Payment</h1>
+
+    <p>Complete your payment to confirm your food order.</p>
+
+    <div class="amount">
+
+        <p>Total Amount</p>
+
+        <h2>
+            ₹{{ "%.2f"|format(order.total_amount) }}
+        </h2>
+
+        <p>
+            Order #{{ order.id }}
+        </p>
+
+    </div>
+
+
+    <h3>Select Payment Method</h3>
+
+    <form method="POST"
+          action="{{ url_for('food.confirm_payment', order_id=order.id) }}">
+
+        <label class="method">
+
+            <input
+                type="radio"
+                name="payment_method"
+                value="UPI"
+                required>
+
+            📱 UPI
+
+        </label>
+
+
+        <label class="method">
+
+            <input
+                type="radio"
+                name="payment_method"
+                value="Card">
+
+            💳 Debit / Credit Card
+
+        </label>
+
+
+        <label class="method">
+
+            <input
+                type="radio"
+                name="payment_method"
+                value="Cash">
+
+            💵 Pay at Counter
+
+        </label>
+
+
+        <button
+            type="submit"
+            class="pay-btn">
+
+            Pay ₹{{ "%.2f"|format(order.total_amount) }}
+
+        </button>
+
+    </form>
+
+
+    <a
+        href="{{ url_for('food.food_menu') }}"
+        class="back">
+
+        ← Back to Food Menu
+
+    </a>
+
+</div>
+
+</body>
+</html>

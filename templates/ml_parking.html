@@ -1,0 +1,236 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+
+    <title>ML Parking Prediction</title>
+
+    <style>
+
+        body {
+            font-family: Arial;
+            background: linear-gradient(
+                135deg,
+                #0f172a,
+                #1e3a8a,
+                #2563eb
+            );
+            margin: 0;
+            min-height: 100vh;
+            padding: 30px 15px;
+        }
+
+        .container {
+            max-width: 700px;
+            margin: 20px auto;
+            background: white;
+            padding: 30px;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0,0,0,.2);
+        }
+
+        h1 {
+            color: #172554;
+        }
+
+        .subtitle {
+            color: #64748b;
+            margin-bottom: 25px;
+        }
+
+        label {
+            display: block;
+            font-weight: bold;
+            color: #374151;
+            margin-top: 12px;
+        }
+
+        input,
+        select {
+            width: 100%;
+            padding: 12px;
+            margin: 8px 0 15px;
+            box-sizing: border-box;
+            border: 1px solid #d1d5db;
+            border-radius: 8px;
+            outline: none;
+        }
+
+        input:focus {
+            border-color: #2563eb;
+            box-shadow: 0 0 0 3px rgba(37,99,235,.1);
+        }
+
+        button {
+            width: 100%;
+            padding: 14px;
+            background: #2563eb;
+            color: white;
+            border: 0;
+            border-radius: 8px;
+            font-size: 16px;
+            font-weight: bold;
+            cursor: pointer;
+        }
+
+        button:hover {
+            background: #1d4ed8;
+        }
+
+        .result {
+            margin-top: 25px;
+            padding: 20px;
+            background: #eff6ff;
+            border-left: 5px solid #2563eb;
+            border-radius: 8px;
+        }
+
+        .result h2 {
+            color: #1e40af;
+            margin-top: 0;
+        }
+
+        /* Back Button */
+
+        .back-section {
+            text-align: center;
+            margin-top: 25px;
+        }
+
+        .back-btn {
+            display: inline-block;
+            padding: 12px 22px;
+            background: #111827;
+            color: white;
+            text-decoration: none;
+            border-radius: 8px;
+            font-weight: 600;
+        }
+
+        .back-btn:hover {
+            background: #374151;
+        }
+
+    </style>
+
+</head>
+
+<body>
+
+<div class="container">
+
+    <h1>🤖 ML Smart Parking Prediction</h1>
+
+    <p class="subtitle">
+        Random Forest model predicts parking demand.
+    </p>
+
+    <form method="POST">
+
+        <label>Hour (0-23)</label>
+
+        <input
+            type="number"
+            name="hour"
+            min="0"
+            max="23"
+            value="10"
+            required
+        >
+
+
+        <label>Day (0=Monday, 6=Sunday)</label>
+
+        <input
+            type="number"
+            name="day"
+            min="0"
+            max="6"
+            value="2"
+            required
+        >
+
+
+        <label>Expected Visitors</label>
+
+        <input
+            type="number"
+            name="visitors"
+            min="0"
+            value="20"
+            required
+        >
+
+
+        <label>Employees Present</label>
+
+        <input
+            type="number"
+            name="employees"
+            min="0"
+            value="100"
+            required
+        >
+
+
+        <label>Previous Parking Occupancy (%)</label>
+
+        <input
+            type="number"
+            name="previous_occupancy"
+            min="0"
+            max="100"
+            value="50"
+            required
+        >
+
+
+        <button type="submit">
+            🤖 Predict Parking Demand
+        </button>
+
+    </form>
+
+
+    {% if result %}
+
+    <div class="result">
+
+        <h2>
+            {{ result.status }}
+        </h2>
+
+        <p>
+            <strong>Prediction Probability:</strong>
+            {{ result.probability }}%
+        </p>
+
+        <p>
+            <strong>Recommendation:</strong>
+            {{ result.recommendation }}
+        </p>
+
+    </div>
+
+    {% endif %}
+
+
+    <!-- BACK TO DASHBOARD -->
+
+    <div class="back-section">
+
+        <a
+            href="{{ url_for('dashboard') }}"
+            class="back-btn">
+
+            ← Back to Dashboard
+
+        </a>
+
+    </div>
+
+</div>
+
+</body>
+
+</html>

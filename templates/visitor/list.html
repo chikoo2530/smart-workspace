@@ -1,0 +1,586 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
+
+    <title>Visitors - Smart Workspace</title>
+
+    <style>
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: Arial, sans-serif;
+        }
+
+        body {
+            min-height: 100vh;
+            background: linear-gradient(135deg, #0f172a, #1e3a8a, #2563eb);
+            padding: 30px 20px;
+            color: #1f2937;
+        }
+
+        .container {
+            max-width: 1100px;
+            margin: auto;
+        }
+
+        /* Header */
+
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 25px;
+            color: white;
+        }
+
+        .header h1 {
+            font-size: 30px;
+        }
+
+        .subtitle {
+            margin-top: 6px;
+            color: #dbeafe;
+            font-size: 14px;
+        }
+
+        .add-btn {
+            background: white;
+            color: #2563eb;
+            padding: 12px 18px;
+            border-radius: 9px;
+            text-decoration: none;
+            font-weight: bold;
+            transition: 0.2s;
+        }
+
+        .add-btn:hover {
+            background: #eff6ff;
+        }
+
+        /* Flash Messages */
+
+        .flash {
+            padding: 13px 16px;
+            border-radius: 9px;
+            margin-bottom: 18px;
+            background: white;
+            font-weight: 500;
+        }
+
+        .flash.success {
+            color: #166534;
+            border-left: 5px solid #22c55e;
+        }
+
+        .flash.danger {
+            color: #991b1b;
+            border-left: 5px solid #ef4444;
+        }
+
+        .flash.warning {
+            color: #92400e;
+            border-left: 5px solid #f59e0b;
+        }
+
+        .flash.info {
+            color: #1e40af;
+            border-left: 5px solid #3b82f6;
+        }
+
+        /* Visitor Grid */
+
+        .visitor-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 20px;
+        }
+
+        .visitor-card {
+            background: white;
+            border-radius: 16px;
+            padding: 25px;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.12);
+        }
+
+        .visitor-card h3 {
+            color: #172554;
+            font-size: 21px;
+            margin-bottom: 18px;
+        }
+
+        /* Details */
+
+        .details {
+            background: #f8fafc;
+            border-radius: 10px;
+            padding: 15px;
+            margin-bottom: 18px;
+        }
+
+        .detail-row {
+            display: flex;
+            justify-content: space-between;
+            gap: 15px;
+            padding: 9px 0;
+            border-bottom: 1px solid #e5e7eb;
+        }
+
+        .detail-row:last-child {
+            border-bottom: none;
+        }
+
+        .label {
+            color: #64748b;
+            font-weight: 600;
+        }
+
+        .value {
+            color: #111827;
+            text-align: right;
+        }
+
+        /* Status */
+
+        .status {
+            display: inline-block;
+            padding: 5px 11px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: bold;
+        }
+
+        .status.pending {
+            background: #fef3c7;
+            color: #92400e;
+        }
+
+        .status.approved {
+            background: #dcfce7;
+            color: #166534;
+        }
+
+        /* Parking */
+
+        .parking {
+            color: #1e40af;
+            font-weight: bold;
+        }
+
+        /* Buttons */
+
+        .actions {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+        }
+
+        .btn {
+            display: inline-block;
+            padding: 10px 15px;
+            border: none;
+            border-radius: 8px;
+            text-decoration: none;
+            font-size: 14px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: 0.2s;
+        }
+
+        .qr-btn {
+            background: #2563eb;
+            color: white;
+        }
+
+        .qr-btn:hover {
+            background: #1d4ed8;
+        }
+
+        .approve-btn {
+            background: #16a34a;
+            color: white;
+        }
+
+        .approve-btn:hover {
+            background: #15803d;
+        }
+
+        /* Empty State */
+
+        .empty {
+            background: white;
+            border-radius: 16px;
+            padding: 50px 25px;
+            text-align: center;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.12);
+        }
+
+        .empty-icon {
+            font-size: 50px;
+            margin-bottom: 15px;
+        }
+
+        .empty h2 {
+            color: #172554;
+            margin-bottom: 8px;
+        }
+
+        .empty p {
+            color: #64748b;
+            margin-bottom: 20px;
+        }
+
+        /* Back */
+
+        .back-section {
+            margin-top: 25px;
+            text-align: center;
+        }
+
+        .back-btn {
+            display: inline-block;
+            padding: 12px 20px;
+            background: #111827;
+            color: white;
+            text-decoration: none;
+            border-radius: 9px;
+            font-weight: 600;
+        }
+
+        .back-btn:hover {
+            background: #374151;
+        }
+
+        /* Mobile */
+
+        @media (max-width: 800px) {
+
+            .visitor-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .header {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 18px;
+            }
+
+            .add-btn {
+                width: 100%;
+                text-align: center;
+            }
+
+        }
+
+        @media (max-width: 500px) {
+
+            body {
+                padding: 20px 12px;
+            }
+
+            .header h1 {
+                font-size: 25px;
+            }
+
+            .visitor-card {
+                padding: 20px;
+            }
+
+            .detail-row {
+                flex-direction: column;
+                gap: 4px;
+            }
+
+            .value {
+                text-align: left;
+            }
+
+            .actions {
+                flex-direction: column;
+            }
+
+            .btn {
+                width: 100%;
+                text-align: center;
+            }
+
+        }
+
+    </style>
+
+</head>
+
+
+<body>
+
+
+<div class="container">
+
+
+    <!-- HEADER -->
+
+    <div class="header">
+
+        <div>
+
+            <h1>👥 My Visitors</h1>
+
+            <p class="subtitle">
+                Manage visitor passes and QR verification
+            </p>
+
+        </div>
+
+
+        <a
+            href="{{ url_for('visitor.add_visitor') }}"
+            class="add-btn">
+
+            + Add Visitor
+
+        </a>
+
+    </div>
+
+
+    <!-- FLASH MESSAGES -->
+
+    {% with messages = get_flashed_messages(with_categories=true) %}
+
+        {% for category, message in messages %}
+
+            <div class="flash {{ category }}">
+                {{ message }}
+            </div>
+
+        {% endfor %}
+
+    {% endwith %}
+
+
+    <!-- VISITORS -->
+
+    {% if visitors %}
+
+        <div class="visitor-grid">
+
+
+            {% for visitor in visitors %}
+
+                <div class="visitor-card">
+
+
+                    <h3>
+                        👤 {{ visitor.visitor_name }}
+                    </h3>
+
+
+                    <!-- DETAILS -->
+
+                    <div class="details">
+
+
+                        <div class="detail-row">
+
+                            <span class="label">
+                                Phone
+                            </span>
+
+                            <span class="value">
+                                {{ visitor.visitor_phone }}
+                            </span>
+
+                        </div>
+
+
+                        <div class="detail-row">
+
+                            <span class="label">
+                                Visit Date
+                            </span>
+
+                            <span class="value">
+                                {{ visitor.visit_date }}
+                            </span>
+
+                        </div>
+
+
+                        <div class="detail-row">
+
+                            <span class="label">
+                                Vehicle
+                            </span>
+
+                            <span class="value">
+                                {{ visitor.vehicle_number or "No Vehicle" }}
+                            </span>
+
+                        </div>
+
+
+                        <div class="detail-row">
+
+                            <span class="label">
+                                Parking
+                            </span>
+
+                            <span class="value parking">
+
+                                {% if visitor.parking_slot %}
+
+                                    {{ visitor.parking_slot }}
+
+                                {% else %}
+
+                                    {{ visitor.parking_status }}
+
+                                {% endif %}
+
+                            </span>
+
+                        </div>
+
+
+                        <div class="detail-row">
+
+                            <span class="label">
+                                Status
+                            </span>
+
+                            <span class="value">
+
+                                {% if visitor.status == "Approved" %}
+
+                                    <span class="status approved">
+                                        Approved
+                                    </span>
+
+                                {% else %}
+
+                                    <span class="status pending">
+                                        {{ visitor.status }}
+                                    </span>
+
+                                {% endif %}
+
+                            </span>
+
+                        </div>
+
+
+                    </div>
+
+
+                    <!-- ACTIONS -->
+
+                    <div class="actions">
+
+
+                        <a
+                            href="{{ url_for(
+                                'visitor.visitor_qr',
+                                visitor_id=visitor.id
+                            ) }}"
+                            class="btn qr-btn">
+
+                            📱 View QR
+
+                        </a>
+
+
+                        {% if visitor.status == "Pending" %}
+
+                            <form
+                                method="POST"
+                                action="{{ url_for(
+                                    'visitor.approve_visitor',
+                                    visitor_id=visitor.id
+                                ) }}"
+                                style="display:inline;">
+
+                                <button
+                                    type="submit"
+                                    class="btn approve-btn">
+
+                                    ✓ Approve Visitor
+
+                                </button>
+
+                            </form>
+
+                        {% endif %}
+
+
+                    </div>
+
+
+                </div>
+
+            {% endfor %}
+
+
+        </div>
+
+
+    {% else %}
+
+
+        <!-- EMPTY STATE -->
+
+        <div class="empty">
+
+            <div class="empty-icon">
+                👥
+            </div>
+
+            <h2>
+                No Visitors Yet
+            </h2>
+
+            <p>
+                Add a visitor to generate a secure QR pass.
+            </p>
+
+            <a
+                href="{{ url_for('visitor.add_visitor') }}"
+                class="btn qr-btn">
+
+                + Add Your First Visitor
+
+            </a>
+
+        </div>
+
+
+    {% endif %}
+
+
+    <!-- BACK -->
+
+    <div class="back-section">
+
+        <a
+            href="{{ url_for('dashboard') }}"
+            class="back-btn">
+
+            ← Back to Dashboard
+
+        </a>
+
+    </div>
+
+
+</div>
+
+
+</body>
+
+</html>

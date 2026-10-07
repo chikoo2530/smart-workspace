@@ -1,0 +1,204 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Visitor Verification</title>
+
+    <style>
+        body {
+            margin: 0;
+            font-family: Arial, sans-serif;
+            background: #f1f5f9;
+        }
+
+        .container {
+            max-width: 600px;
+            margin: 50px auto;
+            padding: 20px;
+        }
+
+        .card {
+            background: white;
+            padding: 30px;
+            border-radius: 16px;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.10);
+        }
+
+        h1 {
+            text-align: center;
+            margin-bottom: 25px;
+        }
+
+        .verified {
+            text-align: center;
+            background: #dcfce7;
+            color: #166534;
+            padding: 15px;
+            border-radius: 10px;
+            font-weight: bold;
+            margin-bottom: 25px;
+        }
+
+        .row {
+            display: flex;
+            justify-content: space-between;
+            padding: 13px 0;
+            border-bottom: 1px solid #e5e7eb;
+        }
+
+        .label {
+            font-weight: bold;
+            color: #475569;
+        }
+
+        .value {
+            color: #111827;
+            text-align: right;
+        }
+
+        .parking {
+            background: #dbeafe;
+            color: #1e40af;
+            padding: 6px 12px;
+            border-radius: 20px;
+            font-weight: bold;
+        }
+
+        .pending {
+            background: #fef3c7;
+            color: #92400e;
+            padding: 6px 12px;
+            border-radius: 20px;
+            font-weight: bold;
+        }
+
+        .approved {
+            background: #dcfce7;
+            color: #166534;
+            padding: 6px 12px;
+            border-radius: 20px;
+            font-weight: bold;
+        }
+
+        .error {
+            text-align: center;
+            color: #dc2626;
+            font-weight: bold;
+        }
+    </style>
+</head>
+
+<body>
+
+<div class="container">
+
+    <div class="card">
+
+        {% if visitor %}
+
+            <h1>🔐 Visitor Verification</h1>
+
+            <div class="verified">
+                ✓ QR Code Verified
+            </div>
+
+            <div class="row">
+                <span class="label">Visitor Name</span>
+                <span class="value">
+                    {{ visitor.visitor_name }}
+                </span>
+            </div>
+
+            <div class="row">
+                <span class="label">Employee</span>
+                <span class="value">
+                    {{ visitor.employee.name }}
+                </span>
+            </div>
+
+            <div class="row">
+                <span class="label">Phone</span>
+                <span class="value">
+                    {{ visitor.visitor_phone }}
+                </span>
+            </div>
+
+            <div class="row">
+                <span class="label">Visit Date</span>
+                <span class="value">
+                    {{ visitor.visit_date.strftime("%d-%m-%Y") }}
+                </span>
+            </div>
+
+            <div class="row">
+                <span class="label">Vehicle</span>
+                <span class="value">
+                    {{ visitor.vehicle_number or "No Vehicle" }}
+                </span>
+            </div>
+
+            <div class="row">
+                <span class="label">Parking</span>
+
+                <span class="value">
+
+                    {% if visitor.parking_slot %}
+
+                        <span class="parking">
+                            {{ visitor.parking_slot }}
+                        </span>
+
+                    {% elif visitor.parking_required %}
+
+                        Required
+
+                    {% else %}
+
+                        No Parking
+
+                    {% endif %}
+
+                </span>
+            </div>
+
+            <div class="row">
+                <span class="label">Access Status</span>
+
+                <span class="value">
+
+                    {% if visitor.status == "Approved" %}
+
+                        <span class="approved">
+                            APPROVED
+                        </span>
+
+                    {% else %}
+
+                        <span class="pending">
+                            PENDING
+                        </span>
+
+                    {% endif %}
+
+                </span>
+
+            </div>
+
+        {% else %}
+
+            <h1>❌ Invalid QR</h1>
+
+            <p class="error">
+                Visitor QR code is invalid or expired.
+            </p>
+
+        {% endif %}
+
+    </div>
+
+</div>
+
+</body>
+</html>

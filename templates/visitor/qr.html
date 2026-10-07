@@ -1,0 +1,620 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
+
+    <title>Visitor QR - Smart Workspace</title>
+
+    <style>
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: Arial, sans-serif;
+        }
+
+        body {
+            min-height: 100vh;
+            background: linear-gradient(135deg, #0f172a, #1e3a8a, #2563eb);
+            padding: 30px 20px;
+            color: #1f2937;
+        }
+
+        /* Main Container */
+
+        .container {
+            width: 100%;
+            max-width: 560px;
+            margin: 20px auto;
+            background: white;
+            padding: 35px;
+            border-radius: 20px;
+            box-shadow: 0 15px 40px rgba(0, 0, 0, 0.25);
+        }
+
+        /* Logo */
+
+        .logo {
+            text-align: center;
+            color: #111827;
+            font-size: 18px;
+            font-weight: bold;
+            margin-bottom: 18px;
+        }
+
+        .logo span {
+            color: #2563eb;
+        }
+
+        /* Heading */
+
+        h1 {
+            text-align: center;
+            color: #172554;
+            font-size: 28px;
+            margin-bottom: 8px;
+        }
+
+        .visitor-name {
+            text-align: center;
+            color: #2563eb;
+            font-size: 22px;
+            margin-bottom: 25px;
+        }
+
+        /* Details */
+
+        .details {
+            background: #f8fafc;
+            padding: 20px;
+            border-radius: 12px;
+            margin-bottom: 25px;
+            border: 1px solid #e5e7eb;
+        }
+
+        .detail-row {
+            display: flex;
+            justify-content: space-between;
+            gap: 20px;
+            padding: 12px 0;
+            border-bottom: 1px solid #e5e7eb;
+        }
+
+        .detail-row:last-child {
+            border-bottom: none;
+        }
+
+        .label {
+            font-weight: 600;
+            color: #475569;
+        }
+
+        .value {
+            text-align: right;
+            color: #111827;
+            font-weight: 500;
+        }
+
+        /* Status */
+
+        .status {
+            display: inline-block;
+            padding: 5px 12px;
+            border-radius: 20px;
+            font-size: 13px;
+            font-weight: bold;
+        }
+
+        .status-pending {
+            background: #fef3c7;
+            color: #92400e;
+        }
+
+        .status-approved {
+            background: #dcfce7;
+            color: #166534;
+        }
+
+        .parking {
+            display: inline-block;
+            padding: 5px 12px;
+            border-radius: 20px;
+            background: #dbeafe;
+            color: #1e40af;
+            font-weight: bold;
+        }
+
+        /* QR Section */
+
+        .qr-section {
+            text-align: center;
+            margin-top: 25px;
+        }
+
+        .qr-section h3 {
+            color: #111827;
+            margin-bottom: 8px;
+        }
+
+        .instruction {
+            color: #64748b;
+            font-size: 14px;
+            line-height: 1.5;
+            margin-bottom: 15px;
+        }
+
+        /* QR Code */
+
+        #qrcode {
+            width: 250px;
+            height: 250px;
+            margin: 20px auto;
+            padding: 10px;
+            background: white;
+            border: 1px solid #e5e7eb;
+            border-radius: 12px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        #qrcode img,
+        #qrcode canvas {
+            max-width: 100%;
+            max-height: 100%;
+        }
+
+        /* Buttons */
+
+        .actions {
+            text-align: center;
+            margin-top: 20px;
+        }
+
+        .btn {
+            display: inline-block;
+            padding: 12px 20px;
+            margin: 6px 4px;
+            border: none;
+            border-radius: 9px;
+            cursor: pointer;
+            text-decoration: none;
+            font-size: 15px;
+            font-weight: 600;
+            transition: 0.2s;
+        }
+
+        .share {
+            background: #2563eb;
+            color: white;
+        }
+
+        .share:hover {
+            background: #1d4ed8;
+        }
+
+        .print {
+            background: #64748b;
+            color: white;
+        }
+
+        .print:hover {
+            background: #475569;
+        }
+
+        .back {
+            background: #111827;
+            color: white;
+        }
+
+        .back:hover {
+            background: #374151;
+        }
+
+        /* Verification Info */
+
+        .security-note {
+            margin-top: 25px;
+            padding: 15px;
+            background: #eff6ff;
+            border-left: 4px solid #2563eb;
+            border-radius: 8px;
+            color: #1e3a8a;
+            font-size: 13px;
+            line-height: 1.5;
+        }
+
+        /* Mobile */
+
+        @media (max-width: 600px) {
+
+            body {
+                padding: 15px;
+            }
+
+            .container {
+                padding: 25px 18px;
+                margin: 10px auto;
+            }
+
+            h1 {
+                font-size: 24px;
+            }
+
+            .visitor-name {
+                font-size: 20px;
+            }
+
+            .detail-row {
+                flex-direction: column;
+                gap: 5px;
+            }
+
+            .value {
+                text-align: left;
+            }
+
+            #qrcode {
+                width: 220px;
+                height: 220px;
+            }
+
+            .btn {
+                width: 100%;
+                margin: 6px 0;
+            }
+
+        }
+
+        /* Print */
+
+        @media print {
+
+            body {
+                background: white;
+                padding: 0;
+            }
+
+            .container {
+                box-shadow: none;
+                border: none;
+                margin: 0 auto;
+            }
+
+            .actions,
+            .security-note {
+                display: none;
+            }
+
+        }
+
+    </style>
+
+</head>
+
+
+<body>
+
+
+<div class="container">
+
+
+    <!-- LOGO -->
+
+    <div class="logo">
+
+        Smart<span>Workspace</span>
+
+    </div>
+
+
+    <!-- TITLE -->
+
+    <h1>
+        🎫 Visitor QR Code
+    </h1>
+
+
+    <h2 class="visitor-name">
+        {{ visitor.visitor_name }}
+    </h2>
+
+
+    <!-- VISITOR DETAILS -->
+
+    <div class="details">
+
+
+        <div class="detail-row">
+
+            <span class="label">
+                Phone
+            </span>
+
+            <span class="value">
+                {{ visitor.visitor_phone }}
+            </span>
+
+        </div>
+
+
+        <div class="detail-row">
+
+            <span class="label">
+                Visit Date
+            </span>
+
+            <span class="value">
+                {{ visitor.visit_date }}
+            </span>
+
+        </div>
+
+
+        <div class="detail-row">
+
+            <span class="label">
+                Vehicle
+            </span>
+
+            <span class="value">
+                {{ visitor.vehicle_number or "No Vehicle" }}
+            </span>
+
+        </div>
+
+
+        <div class="detail-row">
+
+            <span class="label">
+                Parking
+            </span>
+
+            <span class="value">
+                {{ visitor.parking_status }}
+            </span>
+
+        </div>
+
+
+        {% if visitor.parking_slot %}
+
+        <div class="detail-row">
+
+            <span class="label">
+                Parking Slot
+            </span>
+
+            <span class="value">
+
+                <span class="parking">
+                    {{ visitor.parking_slot }}
+                </span>
+
+            </span>
+
+        </div>
+
+        {% endif %}
+
+
+        <div class="detail-row">
+
+            <span class="label">
+                Status
+            </span>
+
+            <span class="value">
+
+                {% if visitor.status == "Approved" %}
+
+                    <span class="status status-approved">
+                        Approved
+                    </span>
+
+                {% else %}
+
+                    <span class="status status-pending">
+                        {{ visitor.status }}
+                    </span>
+
+                {% endif %}
+
+            </span>
+
+        </div>
+
+
+    </div>
+
+
+    <!-- QR SECTION -->
+
+    <div class="qr-section">
+
+        <h3>
+            Visitor QR
+        </h3>
+
+        <p class="instruction">
+            Share this QR code with your visitor.
+        </p>
+
+
+        <div id="qrcode"></div>
+
+
+        <p class="instruction">
+
+            Visitor can scan this QR at the
+            security/basement entrance.
+
+        </p>
+
+    </div>
+
+
+    <!-- ACTION BUTTONS -->
+
+    <div class="actions">
+
+
+        <button
+            type="button"
+            class="btn share"
+            onclick="shareVisitorQR()">
+
+            📤 Share QR
+
+        </button>
+
+
+        <button
+            type="button"
+            class="btn print"
+            onclick="window.print()">
+
+            🖨️ Print QR
+
+        </button>
+
+
+        <br>
+
+
+        <a
+            href="{{ url_for('visitor.list_visitors') }}"
+            class="btn back">
+
+            ← Back to Visitors
+
+        </a>
+
+
+    </div>
+
+
+    <!-- SECURITY NOTE -->
+
+    <div class="security-note">
+
+        🔐 <strong>Security:</strong>
+        This QR contains a secure visitor verification
+        link. Security staff can scan it to verify the
+        visitor and parking information.
+
+    </div>
+
+
+</div>
+
+
+<!-- QR CODE LIBRARY -->
+
+<script src="https://cdn.jsdelivr.net/npm/qrcodejs@1.0.0/qrcode.min.js"></script>
+
+
+<script>
+
+    /* QR VERIFICATION URL */
+
+    const verificationUrl =
+        window.location.origin +
+        "{{ url_for('visitor.verify_visitor', qr_token=visitor.qr_token) }}";
+
+
+    /* GENERATE QR */
+
+    new QRCode(
+        document.getElementById("qrcode"),
+        {
+            text: verificationUrl,
+            width: 230,
+            height: 230
+        }
+    );
+
+
+    /* SHARE VISITOR QR */
+
+    async function shareVisitorQR() {
+
+        const shareText =
+            "Smart Workspace Visitor Pass\n\n" +
+            "Visitor: {{ visitor.visitor_name }}\n" +
+            "Visit Date: {{ visitor.visit_date }}\n" +
+            "Vehicle: {{ visitor.vehicle_number or 'No Vehicle' }}\n" +
+            "Parking: {{ visitor.parking_status }}\n" +
+            "{% if visitor.parking_slot %}" +
+            "Parking Slot: {{ visitor.parking_slot }}\n" +
+            "{% endif %}" +
+            "\nVisitor Verification Link:\n" +
+            verificationUrl;
+
+
+        if (navigator.share) {
+
+            try {
+
+                await navigator.share({
+
+                    title: "Smart Workspace Visitor Pass",
+
+                    text: shareText,
+
+                    url: verificationUrl
+
+                });
+
+            }
+
+            catch (error) {
+
+                console.log(
+                    "Share cancelled:",
+                    error
+                );
+
+            }
+
+        }
+
+        else {
+
+            try {
+
+                await navigator.clipboard.writeText(
+                    shareText
+                );
+
+                alert(
+                    "Visitor pass copied successfully. You can paste it into WhatsApp, Email, Teams, or another app."
+                );
+
+            }
+
+            catch (error) {
+
+                alert(
+                    "Please copy this visitor verification link:\n\n" +
+                    verificationUrl
+                );
+
+            }
+
+        }
+
+    }
+
+</script>
+
+
+</body>
+
+</html>
